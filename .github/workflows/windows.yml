@@ -1,0 +1,47 @@
+name: Test Windows Shell
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: [self-hosted, windows]
+
+    defaults:
+      run:
+        shell: powershell
+
+    steps:
+      - name: Show runner context
+        run: |
+          echo "Running on $env:COMPUTERNAME"
+          echo "Current directory: $(Get-Location)"
+
+      - name: Show temp folder
+        run: |
+          echo "Runner temp: $env:RUNNER_TEMP"
+          Get-ChildItem -Path "$env:RUNNER_TEMP"
+
+      - name: Add Flutter to PATH (if needed)
+        run: |
+          $flutterPath = "C:\Users\footb\Downloads\flutter_windows_3.13.6-stable\flutter\bin"
+          if (-not ($env:Path -like "*$flutterPath*")) {
+            $env:Path += ";$flutterPath"
+          }
+          flutter --version
+
+      - name: Run Flutter doctor
+        run: flutter doctor
+
+      - name: Get Flutter packages
+        run: flutter pub get
+
+      - name: Analyze Dart code
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Build APK (no release/upload)
+        run: flutter build apk --debug
