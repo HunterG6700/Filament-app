@@ -10,32 +10,34 @@ jobs:
   build:
     runs-on: self-hosted
 
+    defaults:
+        run:
+          shell: powershell
+  
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "^3.7.0"
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Analyze code
-        run: flutter analyze
-
-      - name: Run tests
-        run: flutter test
-
-      - name: Build APK
-        run: flutter build apk --release
-
-      - name: List build directory
-        run: dir build\app\outputs\flutter-apk
-
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: app-release.apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+        - name: Checkout
+          uses: actions/checkout@v3
+  
+        - name: Set up Flutter
+          uses: subosito/flutter-action@v2
+          with:
+            flutter-version: '^3.7.0'
+            channel: stable
+  
+        - name: Flutter doctor
+          run: flutter doctor
+  
+        - name: Get dependencies
+          run: flutter pub get
+  
+        - name: Format code
+          run: flutter format --set-exit-if-changed .
+  
+        - name: Analyze
+          run: flutter analyze
+  
+        - name: Run tests
+          run: flutter test
+  
+        - name: Build APK (optional)
+          run: flutter build apk --debug
