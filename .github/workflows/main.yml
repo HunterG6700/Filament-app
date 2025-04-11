@@ -10,6 +10,10 @@ jobs:
   build:
     runs-on: self-hosted
 
+    defaults:
+      run:
+        shell: cmd  # Forces cmd.exe for all run steps
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -30,12 +34,3 @@ jobs:
 
       - name: Build APK
         run: flutter build apk --release
-
-      - name: List build directory
-        run: dir build\app\outputs\flutter-apk
-
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: app-release.apk
-          path: build/app/outputs/flutter-apk/app-release.apk
