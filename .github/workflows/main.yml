@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout code
@@ -17,7 +17,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "^3.7.0" # Update if needed
+          flutter-version: "^3.7.0"
 
       - name: Install dependencies
         run: flutter pub get
@@ -30,6 +30,9 @@ jobs:
 
       - name: Build APK
         run: flutter build apk --release
+
+      - name: List build directory
+        run: dir build\app\outputs\flutter-apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v3
