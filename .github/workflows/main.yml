@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted  # This will run on your Windows runner
 
     steps:
       - name: Checkout code
@@ -17,7 +17,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "^3.7.0" # Update if needed
+          flutter-version: "^3.7.0"  # ✔️ Use the version your project needs
 
       - name: Install dependencies
         run: flutter pub get
