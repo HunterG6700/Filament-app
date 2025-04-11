@@ -1,0 +1,20 @@
+name: Test Windows Shell
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: [self-hosted, windows]
+
+    defaults:
+      run:
+        shell: powershell
+
+    steps:
+      - name: Check runner context
+        run: |
+          echo "Running on $env:COMPUTERNAME"
+          echo "Current directory: $(Get-Location)"
+
+      - name: List temp dir
+        run: Get-ChildItem -Path "$env:RUNNER_TEMP"
