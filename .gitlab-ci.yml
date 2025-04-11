@@ -1,0 +1,48 @@
+stages:
+  - format
+  - test
+  - build
+  - release
+
+variables:
+  FLUTTER_VERSION: "3.7.0" # Change to your Flutter version
+
+before_script:
+  - apt-get update -y
+  - apt-get install -y curl git unzip xz-utils
+  - curl -sL https://storage.googleapis.com/download.flutter.io/flutter_linux_2.0.4-stable.tar.xz | tar xJ -C $HOME
+  - export PATH="$HOME/flutter/bin:$PATH"
+  - flutter doctor
+
+format:
+  stage: format
+  script:
+    - flutter format --dry-run --set-exit-if-changed .
+  only:
+    - merge_requests
+    - main
+
+test:
+  stage: test
+  script:
+    - flutter pub get
+    - flutter test
+  only:
+    - merge_requests
+    - main
+
+build:
+  stage: build
+  script:
+    - flutter pub get
+    - flutter build apk --release
+  only:
+    - main
+
+release:
+  stage: release
+  script:
+    - curl -sL https://github.com/softprops/action-gh-release/releases/download/v1.0.0/action-gh-release-linux-amd64.tar.gz | tar -xz
+    - ./action-gh-release -f build/app/outputs/flutter-apk/app-release.apk
+  only:
+    - main
