@@ -1,4 +1,4 @@
-name: Test Windows Shell
+name: Windows Flutter CI
 
 on:
   pull_request:
