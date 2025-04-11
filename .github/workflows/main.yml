@@ -1,8 +1,0 @@
-on: push
-name: cleans, build and test app (mobile - android)
-jobs:
-  build:
-    name: install dependencies
-    uses: subosito/flutter-action@v2.19.0
-
-
